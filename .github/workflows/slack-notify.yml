@@ -1,0 +1,21 @@
+name: Status Notification
+
+on: pull_request
+jobs:
+  slackNotification:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Success
+        if: always()
+      - uses: rtCamp/action-slack-notify@master
+      - uses: kpritam/slack-job-status-action@v1
+        with:
+          job-status: ${{ job.status }}
+          channel: playground
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: "#320078"
+          SLACK_MESSAGE: "Ready to fly :rocket: Build complete! successfully pushed to subjeCR.azurecr.io/wagtail-app:${{ github.run_id }} and deployed on Kubernetes Cluster."
+          SLACK_TITLE: Build & Deploy to K8s
